@@ -1258,3 +1258,21 @@ img { max-width: 100%; display: block; }
 .portal-nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(201,169,110,0.08); }
 .portal-section { display: none; }
 .portal-section.active { display: block; }
+/* ── PORTAL CLOSE FIX ── */
+@media (max-width: 768px) {
+  #userPortalModal > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+  /* shrink portal to not be fullscreen so user sees the overlay/back */
+  #userPortalModal {
+    align-items: flex-end !important;
+  }
+  #userPortalModal > div {
+    height: 92vh !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+}
