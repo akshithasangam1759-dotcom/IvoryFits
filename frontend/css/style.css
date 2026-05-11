@@ -1317,3 +1317,35 @@ img { max-width: 100%; display: block; }
     border-bottom-color: var(--gold) !important;
   }
 }
+/* ── MOBILE FIXES v2 ── */
+
+/* Fix 1: Show close button on portal modal mobile */
+@media (max-width: 768px) {
+  #userPortalModal .portal-close {
+    display: flex !important;
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    z-index: 99999 !important;
+  }
+}
+
+/* Fix 2: Hero cards not overlapping button */
+@media (max-width: 1100px) {
+  .hero {
+    flex-direction: column !important;
+    min-height: unset !important;
+  }
+  .hero-content {
+    padding-bottom: 1rem !important;
+    z-index: 2 !important;
+    position: relative !important;
+  }
+  .hero-cards {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    margin-top: 1rem !important;
+    z-index: 1 !important;
+  }
+}
