@@ -1,7 +1,7 @@
 /* ============================================================
    IVORYFITS — Main Frontend JavaScript (v3 — Gender Categories)
    ============================================================ */
-
+const BASE_URL = 'https://ivoryfits.onrender.com';
 // ── CATEGORY MAPS ──
 const GENDER_CATEGORIES = {
   all: [],
