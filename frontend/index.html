@@ -767,13 +767,13 @@
   <div style="background:var(--surface);border-radius:16px;width:90%;max-width:860px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
     
     <!-- Header -->
-    <div style="background:var(--bg);border-bottom:1px solid var(--border2);padding:1.25rem 1.75rem;display:flex;align-items:center;gap:1rem">
+    <div style="background:var(--bg);border-bottom:1px solid var(--border);padding:1.25rem 1.75rem;display:flex;align-items:center;gap:1rem;min-height:72px;box-sizing:border-box">
       <div id="portalInitial" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2a1f0a,#4a3520);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--gold);flex-shrink:0">A</div>
-      <div>
-        <div id="portalUserName" style="font-size:1rem;letter-spacing:0.04em">User</div>
+      <div style="min-width:0;flex:1;overflow:hidden">
+        <div id="portalUserName" style="font-size:1rem;letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">User</div>
         <div id="portalUserSub" style="font-size:0.72rem;color:var(--text3);margin-top:2px;letter-spacing:0.06em;text-transform:uppercase">Member</div>
       </div>
-      <button onclick="closeUserPortal()" style="margin-left:auto;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:1rem;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:99999">✕</button>
+      <button onclick="closeUserPortal()" style="margin-left:8px;flex-shrink:0;background:var(--gold);border:none;color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center">✕</button>
     </div>
 
     <!-- Body -->
