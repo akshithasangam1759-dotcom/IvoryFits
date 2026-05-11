@@ -171,7 +171,7 @@ app.get('/api/products/:id', async (req, res) => {
   } catch { res.status(500).json({ error: 'Server error' }); }
 });
 
-app.post('/api/products', async (req, res) => {
+app.post('/api/products', adminMiddleware, async (req, res) => {
   const { name, category, price, description, image, stock, sizes, badge, color } = req.body;
   try {
     if (db) {
@@ -187,7 +187,7 @@ app.post('/api/products', async (req, res) => {
   } catch { res.status(500).json({ error: 'Server error' }); }
 });
 
-app.put('/api/products/:id', async (req, res) => {
+app.put('/api/products/:id', adminMiddleware, async (req, res) => {
   const { name, category, price, description, stock } = req.body;
   try {
     if (db) {
@@ -201,7 +201,7 @@ app.put('/api/products/:id', async (req, res) => {
   } catch { res.status(500).json({ error: 'Server error' }); }
 });
 
-app.delete('/api/products/:id', async (req, res) => {
+app.delete('/api/products/:id', adminMiddleware, async (req, res) => {
   try {
     if (db) {
       await db.execute('DELETE FROM products WHERE id=?', [req.params.id]);
@@ -228,14 +228,14 @@ app.post('/api/orders', async (req, res) => {
 
     // Send email to you (the owner)
     const itemsList = order.items.map(i => `${i.name} x${i.qty} — ₹${(i.price * i.qty).toFixed(2)}`).join('\n');
-    await transporter.sendMail
-    console.log('✓ Email sent for order:', order.id);({
+    await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.OWNER_EMAIL,
       subject: `🛍️ New Order #${order.id} — IvoryFits`,
       text: `New order received!\n\nOrder ID: ${order.id}\nDate: ${new Date().toLocaleString('en-IN')}\n\nCustomer: ${order.shipping?.name}\nEmail: ${order.shipping?.email}\nAddress: ${order.shipping?.address}, ${order.shipping?.city}\n\nItems:\n${itemsList}\n\nTotal: ₹${parseFloat(order.total).toFixed(2)}\nStatus: Processing`,
       
     });
+    console.log('✓ Email sent for order:', order.id);
 
     // Send confirmation to customer too
     if (order.shipping?.email) {
