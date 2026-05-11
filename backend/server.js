@@ -5,17 +5,8 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  }
-});
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -230,23 +221,25 @@ app.post('/api/orders', async (req, res) => {
 
     // Send email to you (the owner)
     const itemsList = order.items.map(i => `${i.name} x${i.qty} — ₹${(i.price * i.qty).toFixed(2)}`).join('\n');
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.OWNER_EMAIL,
-      subject: `🛍️ New Order #${order.id} — IvoryFits`,
-      text: `New order received!\n\nOrder ID: ${order.id}\nDate: ${new Date().toLocaleString('en-IN')}\n\nCustomer: ${order.shipping?.name}\nEmail: ${order.shipping?.email}\nAddress: ${order.shipping?.address}, ${order.shipping?.city}\n\nItems:\n${itemsList}\n\nTotal: ₹${parseFloat(order.total).toFixed(2)}\nStatus: Processing`,
-      
-    });
+    await resend.emails.send({
+  from: 'IvoryFits <onboarding@resend.dev>',
+  to: process.env.OWNER_EMAIL,
+  subject: `🛍️ New Order #${order.id} — IvoryFits`,
+  text: `New order!\n\nOrder ID: ${order.id}\nCustomer: ${order.shipping?.name}\nEmail: ${order.shipping?.email}\nTotal: ₹${parseFloat(order.total).toFixed(2)}`
+});
     console.log('✓ Email sent for order:', order.id);
 
     // Send confirmation to customer too
     if (order.shipping?.email) {
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: order.shipping.email,
-        subject: `✦ Your IvoryFits Order #${order.id} is Confirmed!`,
-        text: `Hey ${order.shipping.name}! 🖤\n\nYour order has been placed successfully.\n\nOrder ID: ${order.id}\n\nItems:\n${itemsList}\n\nTotal: ₹${parseFloat(order.total).toFixed(2)}\n\nWe'll ship to: ${order.shipping.address}, ${order.shipping.city}\n\nExpected delivery: 3-5 business days.\n\nThank you for shopping with IvoryFits ✦`,
-      });
+      if (order.shipping?.email) {
+  await resend.emails.send({
+    from: 'IvoryFits <onboarding@resend.dev>',
+    to: order.shipping.email,
+    subject: `✦ Your IvoryFits Order #${order.id} is Confirmed!`,
+    text: `Hey ${order.shipping.name}! 🖤\n\nYour order is confirmed!\nOrder ID: ${order.id}\nTotal: ₹${parseFloat(order.total).toFixed(2)}\nDelivery: 3-5 business days.\n\nThank you for shopping with IvoryFits ✦`
+  });
+}
+      console.log('✓ Confirmation email sent to customer:', order.shipping.email);
     }
 
     res.json({ success: true, orderId: order.id });
