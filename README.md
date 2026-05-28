@@ -15,7 +15,9 @@ IvoryFits is a full-stack luxury fashion e-commerce platform with a premium, ele
 🛠️ Tech Stack
 Frontend: HTML, CSS, JavaScript
 Backend: Node.js, Express.js
-Database: MySQL (falls back to in-memory if unavailable)
+Database: MySQL
+
+
 Live url:https://ivoryfits.onrender.com/
 
 
